@@ -11,14 +11,14 @@ class UserDB extends databank{
 		parent::__construct();
 		$sql = "
 			CREATE TABLE IF NOT EXISTS `User` (
-				`updated` Datetime  NOT NULL defult CURRENT_TIMESTAMP ,
-				`created` Datetime  NOT NULL defult CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
+				`updated` Datetime  NOT NULL default CURRENT_TIMESTAMP ,
+				`created` Datetime  NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
 				`first_name` Varchar(255)  NOT NULL  ,
 				`last_name` Varchar(255)  NOT NULL  ,
-				`id` Int(11)  NOT NULL ON UPDATE CURRENT_TIMESTAMP AUTO_INCREMENT,
+				`id` Int(11)  NOT NULL AUTO_INCREMENT,
 				`email` Varchar(255)  NOT NULL  ,
 				`password` Varchar(255)  NOT NULL  ,
-				PRIMARY KEY (`id`)
+				PRIMARY KEY (`id`) 
 			) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;";
 		try {
 	        $connection = $this->connect();
@@ -50,6 +50,13 @@ class UserDB extends databank{
 		$connection = $this->connect(); 
 		$stmt = $connection->prepare("SELECT * FROM User WHERE id = :id");
 		$stmt->bindParam(":id", $key);
+		$stmt->execute();
+		return $stmt->fetchObject("User");
+	}
+	public function getByEmail($email){
+		$connection = $this->connect(); 
+		$stmt = $connection->prepare("SELECT * FROM user WHERE email = :email");
+		$stmt->bindParam(":email", $email);
 		$stmt->execute();
 		return $stmt->fetchObject("User");
 	}
